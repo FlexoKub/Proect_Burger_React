@@ -31,8 +31,6 @@ export function Toppings({ toppings, checkToppings }) {
                     {item.name}
                 </ToppingLabel>
                 ))}
-                
-                
             </ToppingWrap>
         </>
     )

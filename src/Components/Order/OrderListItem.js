@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import trashImage from '../../image/trash.svg';
 import { totalPriceItems } from '../Function/secondaryFunction';
 import { formatCurrency } from '../Function/secondaryFunction';
-import { Toppings } from '../Modal/Toppings';
+// import { Toppings } from '../Modal/Toppings';
 
 const OrderItemStyled = styled.li`
 display: flex;
@@ -39,20 +39,20 @@ font-size: 14px;
 width: 100%
 `;
 
-export const OrderListItem = ({ order }) => {
+export const OrderListItem = ({ order, index, deleteItem }) => {
     
     const topping = order.topping.filter(item => item.checked)
         .map(item => item.name)
         .join(', ');
 
-    console.log(topping);
+    // console.log(topping);
 
     return (
     <OrderItemStyled>
-        <ItemName>{order.name}</ItemName>
+        <ItemName>{order.name} {order.choice}</ItemName>
         <span>{order.count}</span>
         <ItemPrice>{formatCurrency(totalPriceItems(order))}</ItemPrice>
-        <TrashButton/>
+        <TrashButton onClick={() => deleteItem(index)}/>
         {topping && <Topping>Допы: {topping}</Topping>}
     </OrderItemStyled>
 )};
