@@ -67,15 +67,39 @@ box-shadow: 0 -1px 3px rgba(0,0,0,.3), 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,
 }
 `;
 
-export const NavBar = () => (
+const User = styled.div`
+display: flex;
+align-items: center;
+text-align: center;
+`;
+const LogOut = styled.span`
+font-size: 20px;
+font-weight: 700;
+cursor: pointer;
+margin-right: 30px;
+`;
+const Figure = styled.figure`
+margin: 0 30px;
+`;
+export const NavBar = ({ authentication, logIn, logOut }) => (
     <NavBarStyled>
         <Logo>
         <ImgLogo src={LogoImg} alt="лого"/>
         <H1>PiZZa - BuRRger</H1>
         </Logo>
-        <Login>
-            <img src={siginImg} alt="войти"/>
-            <p>Войти</p>
-            </Login>
+        {authentication ? 
+        <User>
+            <Figure>
+                <img src={siginImg} alt={authentication.displayName}/>
+                <figcaption>{authentication.displayName}</figcaption>
+            </Figure>
+            <LogOut title="Выйти" onClick={logOut}>X</LogOut>
+        </User> :
+        <Login onClick={logIn}>
+            <Figure>
+                <img src={siginImg} alt="войти"/>
+                <figcaption>Войти</figcaption>
+            </Figure>
+        </Login>}
     </NavBarStyled>
 );
