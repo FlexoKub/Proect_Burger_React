@@ -9,3 +9,13 @@ export const totalPriceItems = order => {
 
 export const formatCurrency = value => value.toLocaleString('ru-RU',
 {style: 'currency', currency: 'RUB'});
+
+//ф-я возврашает новый обьект из заказа
+export const projection = rules => {
+    //достаем нужные ключи из базы
+    const keys = Object.keys(rules);
+    return obj => keys.reduce((newObj, key) => {
+        newObj[key] = rules[key].reduce((val, fn, i) => (i ? fn(val) : obj[fn]), null);
+        return newObj;
+    }, {})
+};

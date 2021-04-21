@@ -4,6 +4,7 @@ import { ButtonCheckout } from '../Style/ButtonCheckout';
 import { OrderListItem } from '../Order/OrderListItem';
 import { totalPriceItems } from '../Function/secondaryFunction';
 import { formatCurrency } from '../Function/secondaryFunction';
+import { projection } from '../Function/secondaryFunction';
 
 const OrderStyled = styled.section`
 position: fixed;
@@ -42,11 +43,34 @@ margin-left: 20px;
 const EmptyList = styled.p`
 text-align: center;
 `;
+//правила для выборки из заказа
+const rulesData = {
+    itemName: ['name'],
+    price: ['price'],
+    count: ['count'],
+    toppings: ['topping', arr => arr.filter(obj => obj.checked).map(obj => obj.name),
+                arr => arr.length ? arr : 'no topping'],
+    choice: ['choice', item => item ? item : 'no choices'],
+}
 
 
 
-export const Order = ({ orders, setOrders, setOpenItem }) => {
-//удоление
+export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn, firebaseDatabase }) => {
+    const dataBase = firebaseDatabase();
+    const sendOrder = () => {
+        // console.log(orders);
+        //заказ с выбранными ключами
+        const newOrder = orders.map(projection(rulesData));
+        // console.log(newOrder);
+        //добавление в базу
+        dataBase.ref('orders').push().set({
+            nameClient: authentication.displayName,
+            email: authentication.email,
+            order: newOrder,
+        })
+        setOrders([]);
+}
+    //удоление
     // const deleteItem = index => {
     //     const newOrders = [...orders];
     //     newOrders.splice(index, 1);
@@ -85,7 +109,13 @@ export const Order = ({ orders, setOrders, setOpenItem }) => {
                 <TotalPrice>{formatCurrency(total)}
                 </TotalPrice>
             </Total>
-            <ButtonCheckout>Оформить</ButtonCheckout>
+            <ButtonCheckout onClick={() => {
+                if (authentication) {
+                    sendOrder();
+                } else {
+                    logIn();
+                }
+            }}>Оформить</ButtonCheckout>
         </OrderStyled>
     )
 }
