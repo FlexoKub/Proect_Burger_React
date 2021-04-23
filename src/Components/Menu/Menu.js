@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { ListItem } from '../Menu/ListItem';
 import { Banner } from '../Menu/Banner';
 import { useFetch } from '../Hooks/useFetch';
+import { Context } from '../Function/context';
 
 const MenuStyled = styled.main`
 background-color: #ccc;
@@ -18,8 +19,8 @@ align-items: center;
 justify-content: center;
 `;
 
-export const Menu = ({ setOpenItem }) => {
-
+export const Menu = () => {
+    const { openItem: { setOpenItem } } = useContext(Context);
     const res = useFetch();
     const dbMenu = res.response;
 
